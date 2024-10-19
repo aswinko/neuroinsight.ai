@@ -1,5 +1,5 @@
 "use client";
-import { ChevronsDown, Menu, User2Icon } from "lucide-react";
+import { ChevronsDown, Menu } from "lucide-react";
 import React from "react";
 import {
   Sheet,
@@ -19,6 +19,8 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ToggleTheme } from "./toggle-theme";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface RouteProps {
   href: string;
@@ -46,6 +48,14 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
+  const { data: session } = useSession();
+  // console.log(session);
+  
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
+
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <header className="shadow-lg bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border border-secondary z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
@@ -104,7 +114,6 @@ export const Navbar = () => {
       {/* <!-- Desktop --> */}
       <NavigationMenu className="hidden lg:block mx-auto">
         <NavigationMenuList>
-
           <NavigationMenuItem>
             {routeList.map(({ href, label }) => (
               <NavigationMenuLink key={href} asChild>
@@ -117,28 +126,38 @@ export const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="hidden lg:flex">
-
-
-        <Button asChild size="sm" variant="default" aria-label="View on GitHub">
-          <Link
-            aria-label="Sign in Now"
-            href="/signup"
-          >
-            Sign up
-          </Link>
-        </Button>
-
+      <div className="hidden lg:flex items-center">
         <ToggleTheme />
 
-        <Button asChild size="sm" variant="ghost" aria-label="View on GitHub">
-          <Link
+        {!session ? (
+          <Button
+            asChild
+            size="sm"
+            variant="default"
             aria-label="View on GitHub"
-            href="/signup"
           >
-            <User2Icon className="size-5" />
-          </Link>
-        </Button>
+            <Link aria-label="Sign in Now" href="/signup">
+              Sign up
+            </Link>
+          </Button>
+        ) : (
+          <>
+            <Image width={26} height={26} className="border-2 border-primary w-full h-full object-fill mx-4 rounded-full" src={session?.user?.image || ''} alt="" />
+            {/* <p className="text-sm">{session?.user?.name || ''}</p> */}
+
+            <Button
+              onClick={handleLogout}
+              size="sm"
+              variant="outline"
+              aria-label="View on GitHub"
+            >
+              {/* <Link aria-label="View on GitHub" href="/signup"> */}
+              {/* <User2Icon className="size-5" /> */}
+              Logout
+              {/* </Link> */}
+            </Button>
+          </>
+        )}
       </div>
     </header>
   );
