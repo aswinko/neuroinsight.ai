@@ -6,7 +6,10 @@ import { Navbar } from "@/src/components/layout/navbar";
 import { ThemeProvider } from "@/src/components/layout/theme-provider";
 import { FooterSection } from "../components/layout/footer";
 import { auth } from "@/auth";
-import {SessionProvider} from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
+import Providers from "../components/Providers";
+import { Toaster } from "react-hot-toast";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -36,25 +39,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  
+
   return (
     <SessionProvider session={session}>
-      <html lang="pt-br" suppressHydrationWarning>
-        <body className={cn("min-h-screen bg-background", inter.className)}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
+      <Providers>
+        <html lang="pt-br" suppressHydrationWarning>
+          <body className={cn("min-h-screen bg-background", inter.className)}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
 
-            {children}
-            <FooterSection />
-          </ThemeProvider>
-        </body>
-      </html>
+              {children}
+              <FooterSection />
+            </ThemeProvider>
+            <Toaster />
+          </body>
+        </html>
+      </Providers>
     </SessionProvider>
-
   );
 }
