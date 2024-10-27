@@ -4,9 +4,9 @@ import Google from "next-auth/providers/google";
 // import { PrismaAdapter } from "@auth/prisma-adapter";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs";
 // import { db } from "./db";
-import { saltAndHashPassword } from "./src/utils/helper";
+// import { saltAndHashPassword } from "./src/utils/helper";
 import {
   accounts,
   db,
@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
   }),
-  session: { strategy: "jwt" },
+  // session: { strategy: "jwt" },
   providers: [
     Github({ allowDangerousEmailAccountLinking: true }),
     Google({ allowDangerousEmailAccountLinking: true }),

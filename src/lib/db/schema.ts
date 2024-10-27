@@ -18,7 +18,7 @@ const pool = postgres(connectionString, { max: 1 });
 
 export const db = drizzle(pool);
 
-export const userSystemEnum = pgEnum("user_system", ["SYSTEM", "USER"]);
+export const userSystemEnum = pgEnum("user_system", ["system", "user"]);
 export const userAdminEnum = pgEnum("user_admin", ["ADMIN", "USER"]);
 
 export const users = pgTable("users", {
@@ -114,6 +114,8 @@ export const chats = pgTable("chats", {
   fileKey: text("fileKey").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+export type DrizzleChat = typeof chats.$inferSelect;
 
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),

@@ -55,8 +55,8 @@ export default async function RootLayout({
 
               {children}
               <FooterSection />
-            </ThemeProvider>
             <Toaster />
+            </ThemeProvider>
           </body>
         </html>
       </Providers>

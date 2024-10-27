@@ -5,8 +5,11 @@ import { uploadToS3 } from "../lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const FileUpload: React.FC = () => {
+  const session = useSession();
+  // console.log(session);
   const [uploading, setuploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { mutate, isPending } = useMutation({
@@ -47,9 +50,11 @@ const FileUpload: React.FC = () => {
           return;
         }
         mutate(data, {
-          onSuccess(data) {
-            console.log(data);
-            toast.success(data.message);
+          onSuccess({ chat_id }) {
+
+
+            console.log(chat_id);
+            toast.success("Chat created successfully!");
           },
           onError(error) {
             console.error(error);
